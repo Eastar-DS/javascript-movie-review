@@ -1,0 +1,37 @@
+@keyframes shimmer {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: calc(200px + 100%) 0;
+  }
+}
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--color-bluegray-80) 25%,
+    var(--color-bluegray-90) 50%,
+    var(--color-bluegray-80) 75%
+  );
+  background-size: 200px 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 8px;
+}
+
+.skeleton-thumbnail {
+  width: 200px;
+  height: 300px;
+}
+
+.skeleton-text {
+  height: 16px;
+  margin-top: 8px;
+  width: 80%;
+}
+
+.skeleton-text-short {
+  height: 14px;
+  margin-top: 4px;
+  width: 50%;
+}

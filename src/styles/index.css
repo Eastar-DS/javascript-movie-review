@@ -1,0 +1,10 @@
+@import "../../templates/styles/reset.css";
+@import "../../templates/styles/colors.css";
+@import "../../templates/styles/main.css";
+@import "../../templates/styles/tab.css";
+@import "../../templates/styles/thumbnail.css";
+@import "../../templates/styles/modal.css";
+@import "./header.css";
+@import "./search.css";
+@import "./skeleton.css";
+@import "./error.css";

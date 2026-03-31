@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
   <head>
     <meta charset="UTF-8" />
@@ -6,7 +6,88 @@
     <title>영화 리뷰</title>
   </head>
   <body>
-    <div id="app"></div>
+    <div id="wrap">
+      <header>
+        <div class="header-inner">
+          <h1 class="logo">
+            <img src="/templates/images/logo.png" alt="MovieList" />
+          </h1>
+          <div class="search-container">
+            <input
+              type="text"
+              id="searchInput"
+              class="search-input"
+              placeholder="검색"
+            />
+            <button class="search-button" id="searchButton">
+              <img src="/templates/images/Search.png" alt="검색" />
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <div class="background-container" id="headerBackground">
+        <div class="overlay" aria-hidden="true"></div>
+        <div class="top-rated-container">
+          <div class="top-rated-movie" id="topRatedMovie">
+            <div class="rate">
+              <img src="/templates/images/star_filled.png" class="star" />
+              <span class="rate-value"></span>
+            </div>
+            <div class="title"></div>
+            <button class="primary detail" id="topRatedDetailBtn">자세히 보기</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="container">
+        <main>
+          <section>
+            <h2 id="sectionTitle">지금 인기 있는 영화</h2>
+            <ul class="thumbnail-list" id="movieList"></ul>
+            <div class="button-container" id="loadMoreContainer">
+              <button class="primary" id="loadMoreButton">더 보기</button>
+            </div>
+            <div class="error-container" id="errorContainer" style="display: none">
+              <p class="error-message" id="errorMessage"></p>
+              <button class="primary" id="retryButton">다시 시도</button>
+            </div>
+            <p class="no-result" id="noResult" style="display: none">
+              검색 결과가 없습니다.
+            </p>
+          </section>
+        </main>
+      </div>
+
+      <footer class="footer">
+        <p>&copy; 우아한테크코스 All Rights Reserved.</p>
+        <p><img src="/templates/images/woowacourse_logo.png" width="180" /></p>
+      </footer>
+    </div>
+
+    <div class="modal-background" id="modalBackground">
+      <div class="modal">
+        <button class="close-modal" id="closeModal">
+          <img src="/templates/images/modal_button_close.png" />
+        </button>
+        <div class="modal-container">
+          <div class="modal-image">
+            <img id="modalPoster" src="" alt="" />
+          </div>
+          <div class="modal-description">
+            <h2 id="modalTitle"></h2>
+            <p class="category" id="modalCategory"></p>
+            <p class="rate">
+              <img src="/templates/images/star_filled.png" class="star" />
+              <span id="modalRate"></span>
+            </p>
+            <hr />
+            <p class="detail" id="modalDetail"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
