@@ -1,0 +1,381 @@
+{
+  "scriptCompleted": true,
+  "name": "javascript-movie-review",
+  "rawDescription": "우아한테크코스 레벨1 영화 리뷰 미션 저장소",
+  "readmeHead": "# javascript-movie-review\n\nFE 레벨1 영화 리뷰 미션\n\n배포 링크: https://eastar-ds.github.io/javascript-movie-review\n\n# 구현 기능 목록\n\n## 0. 📍 공통\n",
+  "languages": [
+    "css",
+    "html",
+    "json",
+    "markdown",
+    "typescript"
+  ],
+  "frameworks": [
+    "Cypress",
+    "TypeScript",
+    "Vite",
+    "Vitest"
+  ],
+  "files": [
+    {
+      "path": ".github/pull_request_template.md",
+      "language": "markdown",
+      "sizeLines": 33,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".gitkeep",
+      "language": "unknown",
+      "sizeLines": 0,
+      "fileCategory": "code"
+    },
+    {
+      "path": ".npmrc",
+      "language": "unknown",
+      "sizeLines": 1,
+      "fileCategory": "code"
+    },
+    {
+      "path": "README.md",
+      "language": "markdown",
+      "sizeLines": 63,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "cypress.config.ts",
+      "language": "typescript",
+      "sizeLines": 9,
+      "fileCategory": "code"
+    },
+    {
+      "path": "cypress/e2e/spec.cy.ts",
+      "language": "typescript",
+      "sizeLines": 263,
+      "fileCategory": "code"
+    },
+    {
+      "path": "cypress/support/commands.ts",
+      "language": "typescript",
+      "sizeLines": 37,
+      "fileCategory": "code"
+    },
+    {
+      "path": "cypress/support/e2e.ts",
+      "language": "typescript",
+      "sizeLines": 20,
+      "fileCategory": "code"
+    },
+    {
+      "path": "cypress/tsconfig.json",
+      "language": "json",
+      "sizeLines": 16,
+      "fileCategory": "config"
+    },
+    {
+      "path": "index.html",
+      "language": "html",
+      "sizeLines": 76,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "package.json",
+      "language": "json",
+      "sizeLines": 46,
+      "fileCategory": "config"
+    },
+    {
+      "path": "public/.gitkeep",
+      "language": "unknown",
+      "sizeLines": 0,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/api/TmdbClient.ts",
+      "language": "typescript",
+      "sizeLines": 67,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/api/apiBuilder.ts",
+      "language": "typescript",
+      "sizeLines": 46,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/api/apiTypes.ts",
+      "language": "typescript",
+      "sizeLines": 7,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/api/movieResponseMapper.ts",
+      "language": "typescript",
+      "sizeLines": 22,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/constants/constant.ts",
+      "language": "typescript",
+      "sizeLines": 27,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/dom/AppShell.ts",
+      "language": "typescript",
+      "sizeLines": 37,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/dom/selector.ts",
+      "language": "typescript",
+      "sizeLines": 9,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/errors/DomainErrors.ts",
+      "language": "typescript",
+      "sizeLines": 34,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/errors/errorToUserMessage.ts",
+      "language": "typescript",
+      "sizeLines": 30,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/hero/HeroSection.ts",
+      "language": "typescript",
+      "sizeLines": 35,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/main.ts",
+      "language": "typescript",
+      "sizeLines": 59,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/modal.html",
+      "language": "html",
+      "sizeLines": 411,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "src/movie-list/MovieListController.ts",
+      "language": "typescript",
+      "sizeLines": 55,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/movie-list/MovieListStore.ts",
+      "language": "typescript",
+      "sizeLines": 81,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/movie-list/MovieListView.ts",
+      "language": "typescript",
+      "sizeLines": 71,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/movie-list/movieListMarkup.ts",
+      "language": "typescript",
+      "sizeLines": 23,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/notify/Notifier.ts",
+      "language": "typescript",
+      "sizeLines": 29,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/search/SearchForm.ts",
+      "language": "typescript",
+      "sizeLines": 30,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/styles/colors.css",
+      "language": "css",
+      "sizeLines": 13,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "src/styles/index.css",
+      "language": "css",
+      "sizeLines": 6,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "src/styles/main.css",
+      "language": "css",
+      "sizeLines": 322,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "src/styles/modal.css",
+      "language": "css",
+      "sizeLines": 87,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "src/styles/reset.css",
+      "language": "css",
+      "sizeLines": 129,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "src/styles/tab.css",
+      "language": "css",
+      "sizeLines": 32,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "src/styles/thumbnail.css",
+      "language": "css",
+      "sizeLines": 116,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "tests/API/api.test.ts",
+      "language": "typescript",
+      "sizeLines": 143,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/API/apiBuilder.test.ts",
+      "language": "typescript",
+      "sizeLines": 47,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tsconfig.json",
+      "language": "json",
+      "sizeLines": 27,
+      "fileCategory": "config"
+    },
+    {
+      "path": "types/global.d.ts",
+      "language": "typescript",
+      "sizeLines": 4,
+      "fileCategory": "code"
+    },
+    {
+      "path": "types/movie.ts",
+      "language": "typescript",
+      "sizeLines": 7,
+      "fileCategory": "code"
+    },
+    {
+      "path": "types/vite-env.d.ts",
+      "language": "typescript",
+      "sizeLines": 9,
+      "fileCategory": "code"
+    }
+  ],
+  "totalFiles": 43,
+  "estimatedComplexity": "moderate",
+  "importMap": {
+    ".github/pull_request_template.md": [],
+    ".gitkeep": [],
+    ".npmrc": [],
+    "README.md": [],
+    "cypress.config.ts": [],
+    "cypress/e2e/spec.cy.ts": [],
+    "cypress/support/commands.ts": [],
+    "cypress/support/e2e.ts": [
+      "cypress/support/commands.ts"
+    ],
+    "cypress/tsconfig.json": [],
+    "index.html": [],
+    "package.json": [],
+    "public/.gitkeep": [],
+    "src/api/TmdbClient.ts": [
+      "src/api/apiTypes.ts",
+      "src/api/movieResponseMapper.ts",
+      "src/constants/constant.ts",
+      "src/errors/DomainErrors.ts"
+    ],
+    "src/api/apiBuilder.ts": [
+      "src/api/apiTypes.ts",
+      "src/constants/constant.ts",
+      "types/movie.ts"
+    ],
+    "src/api/apiTypes.ts": [
+      "types/movie.ts"
+    ],
+    "src/api/movieResponseMapper.ts": [
+      "src/api/apiTypes.ts",
+      "types/movie.ts"
+    ],
+    "src/constants/constant.ts": [],
+    "src/dom/AppShell.ts": [
+      "src/dom/selector.ts"
+    ],
+    "src/dom/selector.ts": [],
+    "src/errors/DomainErrors.ts": [],
+    "src/errors/errorToUserMessage.ts": [
+      "src/errors/DomainErrors.ts"
+    ],
+    "src/hero/HeroSection.ts": [
+      "src/constants/constant.ts",
+      "src/movie-list/movieListMarkup.ts",
+      "types/movie.ts"
+    ],
+    "src/main.ts": [
+      "src/api/TmdbClient.ts",
+      "src/dom/AppShell.ts",
+      "src/hero/HeroSection.ts",
+      "src/movie-list/MovieListController.ts",
+      "src/movie-list/MovieListStore.ts",
+      "src/movie-list/MovieListView.ts",
+      "src/notify/Notifier.ts",
+      "src/search/SearchForm.ts"
+    ],
+    "src/modal.html": [],
+    "src/movie-list/MovieListController.ts": [
+      "src/constants/constant.ts",
+      "src/hero/HeroSection.ts",
+      "src/movie-list/MovieListStore.ts",
+      "src/movie-list/MovieListView.ts"
+    ],
+    "src/movie-list/MovieListStore.ts": [
+      "src/api/TmdbClient.ts",
+      "types/movie.ts"
+    ],
+    "src/movie-list/MovieListView.ts": [
+      "src/constants/constant.ts",
+      "src/movie-list/movieListMarkup.ts",
+      "types/movie.ts"
+    ],
+    "src/movie-list/movieListMarkup.ts": [
+      "src/constants/constant.ts",
+      "types/movie.ts"
+    ],
+    "src/notify/Notifier.ts": [
+      "src/errors/errorToUserMessage.ts"
+    ],
+    "src/search/SearchForm.ts": [],
+    "src/styles/colors.css": [],
+    "src/styles/index.css": [],
+    "src/styles/main.css": [],
+    "src/styles/modal.css": [],
+    "src/styles/reset.css": [],
+    "src/styles/tab.css": [],
+    "src/styles/thumbnail.css": [],
+    "tests/API/api.test.ts": [
+      "src/api/TmdbClient.ts",
+      "src/errors/DomainErrors.ts"
+    ],
+    "tests/API/apiBuilder.test.ts": [
+      "src/api/movieResponseMapper.ts"
+    ],
+    "tsconfig.json": [],
+    "types/global.d.ts": [],
+    "types/movie.ts": [],
+    "types/vite-env.d.ts": []
+  }
+}
