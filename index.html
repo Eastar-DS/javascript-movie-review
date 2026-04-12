@@ -4,8 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>영화 리뷰</title>
-    <script type="module" crossorigin src="/javascript-movie-review/assets/index-CzACayrd.js"></script>
-    <link rel="stylesheet" crossorigin href="/javascript-movie-review/assets/index-EPesw_hv.css">
+    <script type="module" crossorigin src="/javascript-movie-review/assets/index-B1qb15Ad.js"></script>
+    <link rel="stylesheet" crossorigin href="/javascript-movie-review/assets/index-BeSfSSXi.css">
   </head>
   <body>
     <div id="app">
@@ -57,7 +57,8 @@
               </div>
             </div>
           </section>
-          <button type="submit" id="see-more-btn">더 보기</button>
+          <!-- <button type="submit" id="see-more-btn">더 보기</button> -->
+          <div id="scroll-sentinel" aria-hidden="true"></div>
         </main>
       </div>
 
@@ -79,6 +80,7 @@
             <h2 id="modal-title"></h2>
             <p class="category" id="modal-category"></p>
             <p class="rate">
+              <span class="rate-label">평균</span>
               <img src="./images/star_filled.png" class="star" alt="" aria-hidden="true" />
               <span id="modal-rate-value"></span>
             </p>

@@ -255,7 +255,7 @@ const createMovieListItemMarkup = (movie) => {
       <div class="item-desc">
         <p class="rate">
           <img src="${IMAGE_URL.STAR_IMAGE_URL}" class="star" alt="" aria-hidden="true" />
-          <span>${movie.rate}</span>
+          <span>${movie.rate.toFixed(1)}</span>
         </p>
         <strong>${movie.title}</strong>
       </div>
@@ -298,9 +298,9 @@ class MovieListView {
   hideSkeleton() {
     this.el.skeletonElement.innerHTML = "";
   }
-  toggleSeeMore(visible) {
-    this.el.seeMoreButton.hidden = !visible;
-  }
+  // toggleSeeMore(visible: boolean): void {
+  //   this.el.seeMoreButton.hidden = !visible;
+  // }
   toggleNoResult(visible) {
     this.el.noResult.hidden = !visible;
   }
@@ -322,6 +322,7 @@ class MovieListController {
     this.modal = modal;
     this.ratingRepo = ratingRepo;
   }
+  _detailToken = 0;
   async showPopular() {
     this.view.renderSectionTitle(PAGE_TITLE.POPULAR);
     await this.runWithUi(() => this.store.loadPopular());
@@ -340,11 +341,14 @@ class MovieListController {
     await this.runWithUi(() => this.store.loadNextPage());
   }
   async openDetail(movieId) {
+    const token = ++this._detailToken;
     try {
       const detail = await this.tmdb.fetchMovieDetail(movieId);
+      if (token !== this._detailToken) return;
       const currentRating = this.ratingRepo.getRating(movieId);
       this.modal.open(detail, currentRating);
     } catch (error) {
+      if (token !== this._detailToken) return;
       this.notifier.error(error);
     }
   }
@@ -353,7 +357,6 @@ class MovieListController {
     try {
       await action();
       this.view.renderMovies(this.store.movies);
-      this.view.toggleSeeMore(this.store.hasMore);
       this.view.toggleNoResult(
         this.store.query !== "" && this.store.movies.length === 0
       );
@@ -372,7 +375,7 @@ class HeroSection {
     const posterImageUrl = createImageUrl(BASE_URL.HERO_BASE_URL, movie.hero_path ?? "");
     this.el.backdrop.style.backgroundImage = posterImageUrl ? `url("${posterImageUrl}")` : "";
     this.el.rate.hidden = false;
-    this.el.rateValue.textContent = String(movie.rate);
+    this.el.rateValue.textContent = movie.rate.toFixed(1);
     this.el.title.textContent = movie.title;
   }
   show() {
@@ -404,7 +407,8 @@ const queryAppShell = () => ({
   heroRateValue: $("#hero-rate-value"),
   heroTitle: $("#hero-title"),
   skeletonCard: $(".skeleton-card"),
-  seeMoreBtn: $("#see-more-btn"),
+  // seeMoreBtn: $<HTMLButtonElement>("#see-more-btn"),
+  scrollSentinel: $("#scroll-sentinel"),
   // 모달
   modalBackground: $("#modalBackground"),
   closeModal: $("#closeModal"),
@@ -709,8 +713,11 @@ class MovieDetailModal {
     this.el.poster.src = detail.thumbnail_path ? `${BASE_URL.MODAL_POSTER_BASE_URL}${detail.thumbnail_path}` : IMAGE_URL.DEFAULT_THUMBNAIL_IMAGE_URL;
     this.el.poster.alt = detail.title;
     this.el.title.textContent = detail.title;
-    this.el.category.textContent = `${detail.releaseYear} · ${detail.genres.join(", ")}`;
-    this.el.rateValue.textContent = `${detail.rate}`;
+    const categoryParts = [detail.releaseYear, detail.genres.join(", ")].filter(
+      Boolean
+    );
+    this.el.category.textContent = categoryParts.join(" · ");
+    this.el.rateValue.textContent = `${detail.rate.toFixed(1)}`;
     this.el.detail.textContent = detail.overview;
     this.starRating.setScore(currentRating ?? 0);
     this.el.background.classList.add("active");
@@ -722,6 +729,26 @@ class MovieDetailModal {
   }
   isOpen() {
     return this.el.background.classList.contains("active");
+  }
+}
+class InfiniteScroll {
+  constructor(sentinel, onIntersect) {
+    this.sentinel = sentinel;
+    this.observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          onIntersect();
+        }
+      },
+      { rootMargin: "200px" }
+    );
+  }
+  observer;
+  observe() {
+    this.observer.observe(this.sentinel);
+  }
+  disconnect() {
+    this.observer.disconnect();
   }
 }
 const main = async () => {
@@ -749,7 +776,7 @@ const main = async () => {
     {
       listElement: elements.movieList,
       skeletonElement: elements.skeletonCard,
-      seeMoreButton: elements.seeMoreBtn,
+      // seeMoreButton: elements.seeMoreBtn,
       sectionTitle: elements.movieSectionTitle,
       noResult: elements.noResult
     },
@@ -785,11 +812,11 @@ const main = async () => {
       );
     }
   );
-  elements.seeMoreBtn.addEventListener("click", async (event) => {
-    event.preventDefault();
-    await controller.loadMore();
+  const infiniteScroll = new InfiniteScroll(elements.scrollSentinel, () => {
+    void controller.loadMore();
   });
   await controller.showPopular();
+  infiniteScroll.observe();
 };
 window.addEventListener("load", () => {
   void main().catch((error) => console.error("[bootstrap failed]", error));
