@@ -96,6 +96,9 @@ class EmptyQueryError extends DomainError {
 class ConfigError extends DomainError {
 }
 const mapMovieListResponse = (data) => {
+  if (!Array.isArray(data.results)) {
+    throw new ApiParseError("영화 목록 응답 스킴이 올바르지 않습니다");
+  }
   const movies = data.results.map((movie) => {
     return {
       id: movie.id,
