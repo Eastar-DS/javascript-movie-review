@@ -95,11 +95,16 @@ class EmptyQueryError extends DomainError {
 }
 class ConfigError extends DomainError {
 }
+class StorageError extends DomainError {
+}
 const mapMovieListResponse = (data) => {
   if (!Array.isArray(data.results)) {
     throw new ApiParseError("영화 목록 응답 스킴이 올바르지 않습니다");
   }
   const movies = data.results.map((movie) => {
+    if (typeof movie.vote_average !== "number") {
+      throw new ApiParseError("영화 목록 응답 스킴이 올바르지 않습니다");
+    }
     return {
       id: movie.id,
       title: movie.title,
@@ -115,14 +120,17 @@ const mapMovieListResponse = (data) => {
   };
 };
 const mapMovieDetailResponse = (data) => {
+  if (typeof data.vote_average !== "number") {
+    throw new ApiParseError("영화 상세 응답 스킴이 올바르지 않습니다");
+  }
   return {
     id: data.id,
     title: data.title,
     rate: data.vote_average,
     thumbnail_path: data.poster_path,
     hero_path: data.backdrop_path,
-    genres: (data.genres ?? []).map((g) => g.name),
-    releaseYear: (data.release_date ?? "").slice(0, 4),
+    genres: Array.isArray(data.genres) ? data.genres.map((g) => g.name) : [],
+    releaseYear: typeof data.release_date === "string" ? data.release_date.slice(0, 4) : "",
     overview: data.overview ?? ""
   };
 };
@@ -301,9 +309,6 @@ class MovieListView {
   hideSkeleton() {
     this.el.skeletonElement.innerHTML = "";
   }
-  // toggleSeeMore(visible: boolean): void {
-  //   this.el.seeMoreButton.hidden = !visible;
-  // }
   toggleNoResult(visible) {
     this.el.noResult.hidden = !visible;
   }
@@ -348,10 +353,17 @@ class MovieListController {
     try {
       const detail = await this.tmdb.fetchMovieDetail(movieId);
       if (token !== this._detailToken) return;
-      const currentRating = this.ratingRepo.getRating(movieId);
+      const currentRating = await this.ratingRepo.getRating(movieId);
       this.modal.open(detail, currentRating);
     } catch (error) {
       if (token !== this._detailToken) return;
+      this.notifier.error(error);
+    }
+  }
+  async rateMovie(movieId, score) {
+    try {
+      await this.ratingRepo.saveRating(movieId, score);
+    } catch (error) {
       this.notifier.error(error);
     }
   }
@@ -410,7 +422,6 @@ const queryAppShell = () => ({
   heroRateValue: $("#hero-rate-value"),
   heroTitle: $("#hero-title"),
   skeletonCard: $(".skeleton-card"),
-  // seeMoreBtn: $<HTMLButtonElement>("#see-more-btn"),
   scrollSentinel: $("#scroll-sentinel"),
   // 모달
   modalBackground: $("#modalBackground"),
@@ -590,9 +601,11 @@ const errorToUserMessage = (error) => {
     return "네트워크 연결을 확인해주세요.";
   }
   if (error instanceof ApiError) {
-    if (error.status === 401) return "API 인증에 실패했습니다. 관리자에게 문의해주세요.";
+    if (error.status === 401)
+      return "API 인증에 실패했습니다. 관리자에게 문의해주세요.";
     if (error.status === 404) return "요청한 정보를 찾을 수 없습니다.";
-    if (error.status >= 500) return "서버에 일시적인 문제가 발생했습니다. 잠시 후 다시 시도해주세요.";
+    if (error.status >= 500)
+      return "서버에 일시적인 문제가 발생했습니다. 잠시 후 다시 시도해주세요.";
     return "영화 정보를 불러오지 못했습니다.";
   }
   if (error instanceof ApiParseError) {
@@ -600,6 +613,9 @@ const errorToUserMessage = (error) => {
   }
   if (error instanceof ConfigError) {
     return "앱 설정에 문제가 있습니다. 관리자에게 문의해주세요.";
+  }
+  if (error instanceof StorageError) {
+    return "별점 저장에 실패했습니다. 브라우저 저장 공간을 확인해주세요.";
   }
   if (error instanceof DomainError) return error.message;
   console.error("[unhandled]", error);
@@ -629,16 +645,23 @@ class Notifier {
     });
   }
 }
+const VALID_SCORES = [0, 2, 4, 6, 8, 10];
+const isValidScore = (score) => VALID_SCORES.includes(score);
 const STORAGE_KEY = "movie-ratings";
 class LocalStorageRatingRepo {
-  getRating(movieId) {
+  async getRating(movieId) {
     const ratings = this.loadAll();
-    return ratings[movieId] ?? null;
+    const stored = ratings[movieId];
+    return typeof stored === "number" && isValidScore(stored) ? stored : null;
   }
-  saveRating(movieId, score) {
+  async saveRating(movieId, score) {
     const ratings = this.loadAll();
     ratings[movieId] = score;
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(ratings));
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(ratings));
+    } catch (cause) {
+      throw new StorageError("별점 저장에 실패했습니다.", cause);
+    }
   }
   loadAll() {
     try {
@@ -686,7 +709,7 @@ class StarRating {
     const target = event.target;
     if (!target.matches(".star-rating-star")) return;
     const score = Number(target.dataset.score);
-    if (!score) return;
+    if (!isValidScore(score)) return;
     this.score = score;
     this.render();
     this.onRate(score);
@@ -760,6 +783,7 @@ const main = async () => {
   const tmdb = new TmdbClient("eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhZDFmZTJkZjEwZDNhMTIxNmY5YzhjYzA5MDdlYzc3NyIsIm5iZiI6MTc3NDg1MDk4MS4zNTMsInN1YiI6IjY5Y2ExM2E1YjQwNDUwOTdmZjczMmNjZSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.pMlpwW3109kLfNMg6nIZBC8HdNQ26wK4qQNKO_dV0Dk");
   const movieListStore = new MovieListStore(tmdb);
   const ratingRepo = new LocalStorageRatingRepo();
+  let controller;
   const modal = new MovieDetailModal(
     {
       background: elements.modalBackground,
@@ -772,14 +796,12 @@ const main = async () => {
       myRatingStars: elements.myRatingStars,
       myRatingLabel: elements.myRatingLabel
     },
-    (movieId, score) => ratingRepo.saveRating(movieId, score)
+    (movieId, score) => controller.rateMovie(movieId, score)
   );
-  let controller;
   const movieListView = new MovieListView(
     {
       listElement: elements.movieList,
       skeletonElement: elements.skeletonCard,
-      // seeMoreButton: elements.seeMoreBtn,
       sectionTitle: elements.movieSectionTitle,
       noResult: elements.noResult
     },
@@ -807,6 +829,7 @@ const main = async () => {
     elements.searchInput,
     async (query) => {
       await controller.search(query);
+      infiniteScroll.observe();
     },
     () => {
       notifier.warn(
@@ -815,9 +838,15 @@ const main = async () => {
       );
     }
   );
-  const infiniteScroll = new InfiniteScroll(elements.scrollSentinel, () => {
-    void controller.loadMore();
-  });
+  const infiniteScroll = new InfiniteScroll(
+    elements.scrollSentinel,
+    async () => {
+      await controller.loadMore();
+      if (!movieListStore.hasMore) {
+        infiniteScroll.disconnect();
+      }
+    }
+  );
   await controller.showPopular();
   infiniteScroll.observe();
 };
